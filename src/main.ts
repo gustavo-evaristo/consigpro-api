@@ -96,7 +96,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Consigpro API')
-    .setDescription('Bot api teste')
+    .setDescription('ConsigPro api')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
