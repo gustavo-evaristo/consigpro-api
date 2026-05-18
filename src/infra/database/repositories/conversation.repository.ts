@@ -153,7 +153,7 @@ export class ConversationRepository implements IConversationRepository {
         WHERE k."userId" = ${userId}
           AND k."isDeleted" = false
           AND c."isDeleted" = false
-          AND c."leadPhoneNumber" ~ '^\+\d{10,15}$'
+          AND c."leadPhoneNumber" ~ '^[+][0-9]{10,15}$'
         ORDER BY c."leadPhoneNumber", c."flowId", c."updatedAt" DESC
       ) latest
       ORDER BY COALESCE(latest."lastMessageSentAt", latest."updatedAt") DESC
@@ -262,7 +262,7 @@ export class ConversationRepository implements IConversationRepository {
         WHERE k."userId" = ${userId}
           AND k."isDeleted" = false
           AND c."isDeleted" = false
-          AND c."leadPhoneNumber" ~ '^\+\d{10,15}$'
+          AND c."leadPhoneNumber" ~ '^[+][0-9]{10,15}$'
         ORDER BY c."leadPhoneNumber", c."flowId", c."updatedAt" DESC
       ) leads
       ORDER BY leads."createdAt" DESC
