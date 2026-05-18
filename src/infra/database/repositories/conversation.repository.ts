@@ -276,7 +276,12 @@ export class ConversationRepository implements IConversationRepository {
     leadPhoneNumber: string,
   ): Promise<ConversationEntity | null> {
     const r = await this.prismaService.conversations.findFirst({
-      where: { flowId, leadPhoneNumber, status: ConversationStatus.FINISHED, isDeleted: false },
+      where: {
+        flowId,
+        leadPhoneNumber,
+        status: ConversationStatus.FINISHED,
+        isDeleted: false,
+      },
       orderBy: { updatedAt: 'desc' },
     });
 

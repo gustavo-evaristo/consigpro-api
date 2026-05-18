@@ -19,7 +19,8 @@ export class GetAnalyticsV2Controller {
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get dashboard analytics v2 (new layout) for the authenticated user',
+    summary:
+      'Get dashboard analytics v2 (new layout) for the authenticated user',
   })
   @ApiOkResponse({ type: GetAnalyticsV2Response })
   async getAnalyticsV2(

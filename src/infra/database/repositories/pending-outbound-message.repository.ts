@@ -8,9 +8,7 @@ import {
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
-export class PendingOutboundMessageRepository
-  implements IPendingOutboundMessageRepository
-{
+export class PendingOutboundMessageRepository implements IPendingOutboundMessageRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async enqueue(items: EnqueueOutboundInput[]): Promise<void> {

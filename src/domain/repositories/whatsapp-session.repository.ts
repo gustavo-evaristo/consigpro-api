@@ -1,9 +1,6 @@
 import { WhatsAppSessionEntity } from '../entities/whatsapp-session.entity';
 
-export type WhatsappConnectionStatus =
-  | 'CONNECTED'
-  | 'DISCONNECTED'
-  | 'PENDING';
+export type WhatsappConnectionStatus = 'CONNECTED' | 'DISCONNECTED' | 'PENDING';
 
 export interface WhatsappConnectionInfo {
   status: WhatsappConnectionStatus;

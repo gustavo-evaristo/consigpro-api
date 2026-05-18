@@ -15,7 +15,11 @@ export class KanbanStageRepository implements IKanbanStageRepository {
     });
     return rows.map(
       (r) =>
-        new KanbanStageEntity({ ...r, id: UUID.from(r.id), kanbanId: UUID.from(r.kanbanId) }),
+        new KanbanStageEntity({
+          ...r,
+          id: UUID.from(r.id),
+          kanbanId: UUID.from(r.kanbanId),
+        }),
     );
   }
 

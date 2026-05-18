@@ -31,7 +31,13 @@ const makeDetails = (
     id: string;
     type: NodeType;
     defaultNextNodeId?: string | null;
-    options?: { id: string; content: string; score: number; order: number; nextNodeId: string | null }[];
+    options?: {
+      id: string;
+      content: string;
+      score: number;
+      order: number;
+      nextNodeId: string | null;
+    }[];
   }[],
 ) => ({
   id: 'kanban-1',
@@ -150,7 +156,11 @@ describe('ProcessMessageUseCase', () => {
     const kanban = makeKanban();
     const details = makeDetails([
       { id: 'node-1', type: NodeType.TEXT, defaultNextNodeId: 'node-2' },
-      { id: 'node-2', type: NodeType.QUESTION_FREE_INPUT, defaultNextNodeId: 'node-3' },
+      {
+        id: 'node-2',
+        type: NodeType.QUESTION_FREE_INPUT,
+        defaultNextNodeId: 'node-3',
+      },
       { id: 'node-3', type: NodeType.TEXT, defaultNextNodeId: null },
     ]);
 
@@ -179,7 +189,13 @@ describe('ProcessMessageUseCase', () => {
         id: 'node-1',
         type: NodeType.QUESTION_MULTIPLE_CHOICE,
         options: [
-          { id: 'opt-1', content: 'Yes', score: 10, order: 0, nextNodeId: null },
+          {
+            id: 'opt-1',
+            content: 'Yes',
+            score: 10,
+            order: 0,
+            nextNodeId: null,
+          },
           { id: 'opt-2', content: 'No', score: 0, order: 1, nextNodeId: null },
         ],
       },
@@ -208,7 +224,11 @@ describe('ProcessMessageUseCase', () => {
   it('should save lead response and advance to next node', async () => {
     const kanban = makeKanban();
     const details = makeDetails([
-      { id: 'node-1', type: NodeType.QUESTION_FREE_INPUT, defaultNextNodeId: 'node-2' },
+      {
+        id: 'node-1',
+        type: NodeType.QUESTION_FREE_INPUT,
+        defaultNextNodeId: 'node-2',
+      },
       { id: 'node-2', type: NodeType.TEXT, defaultNextNodeId: null },
     ]);
 
@@ -217,8 +237,12 @@ describe('ProcessMessageUseCase', () => {
 
     vi.mocked(kanbanRepository.findByPhoneNumber).mockResolvedValue(kanban);
     vi.mocked(kanbanRepository.getDetails).mockResolvedValue(details);
-    vi.mocked(conversationRepository.findActive).mockResolvedValue(conversation);
-    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(progress);
+    vi.mocked(conversationRepository.findActive).mockResolvedValue(
+      conversation,
+    );
+    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(
+      progress,
+    );
     vi.mocked(leadResponseRepository.create).mockResolvedValue();
     vi.mocked(progressRepository.update).mockResolvedValue();
     vi.mocked(conversationRepository.update).mockResolvedValue();
@@ -243,8 +267,20 @@ describe('ProcessMessageUseCase', () => {
         id: 'node-1',
         type: NodeType.QUESTION_MULTIPLE_CHOICE,
         options: [
-          { id: 'opt-1', content: 'Yes', score: 10, order: 0, nextNodeId: 'node-yes' },
-          { id: 'opt-2', content: 'No', score: 0, order: 1, nextNodeId: 'node-no' },
+          {
+            id: 'opt-1',
+            content: 'Yes',
+            score: 10,
+            order: 0,
+            nextNodeId: 'node-yes',
+          },
+          {
+            id: 'opt-2',
+            content: 'No',
+            score: 0,
+            order: 1,
+            nextNodeId: 'node-no',
+          },
         ],
       },
       { id: 'node-yes', type: NodeType.TEXT, defaultNextNodeId: null },
@@ -256,8 +292,12 @@ describe('ProcessMessageUseCase', () => {
 
     vi.mocked(kanbanRepository.findByPhoneNumber).mockResolvedValue(kanban);
     vi.mocked(kanbanRepository.getDetails).mockResolvedValue(details);
-    vi.mocked(conversationRepository.findActive).mockResolvedValue(conversation);
-    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(progress);
+    vi.mocked(conversationRepository.findActive).mockResolvedValue(
+      conversation,
+    );
+    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(
+      progress,
+    );
     vi.mocked(leadResponseRepository.create).mockResolvedValue();
     vi.mocked(progressRepository.update).mockResolvedValue();
     vi.mocked(conversationRepository.update).mockResolvedValue();
@@ -269,7 +309,8 @@ describe('ProcessMessageUseCase', () => {
       messageText: 'Yes',
     });
 
-    const savedResponse = vi.mocked(leadResponseRepository.create).mock.calls[0][0];
+    const savedResponse = vi.mocked(leadResponseRepository.create).mock
+      .calls[0][0];
     expect(savedResponse.nodeOptionId).toBe('opt-1');
     expect(savedResponse.score).toBe(10);
     expect(messagesToSend[0]).toBe('Message node-yes');
@@ -282,7 +323,13 @@ describe('ProcessMessageUseCase', () => {
         id: 'node-1',
         type: NodeType.QUESTION_MULTIPLE_CHOICE,
         options: [
-          { id: 'opt-1', content: 'Yes', score: 10, order: 0, nextNodeId: null },
+          {
+            id: 'opt-1',
+            content: 'Yes',
+            score: 10,
+            order: 0,
+            nextNodeId: null,
+          },
           { id: 'opt-2', content: 'No', score: 0, order: 1, nextNodeId: null },
         ],
       },
@@ -293,8 +340,12 @@ describe('ProcessMessageUseCase', () => {
 
     vi.mocked(kanbanRepository.findByPhoneNumber).mockResolvedValue(kanban);
     vi.mocked(kanbanRepository.getDetails).mockResolvedValue(details);
-    vi.mocked(conversationRepository.findActive).mockResolvedValue(conversation);
-    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(progress);
+    vi.mocked(conversationRepository.findActive).mockResolvedValue(
+      conversation,
+    );
+    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(
+      progress,
+    );
     vi.mocked(leadResponseRepository.create).mockResolvedValue();
     vi.mocked(progressRepository.update).mockResolvedValue();
     vi.mocked(conversationRepository.update).mockResolvedValue();
@@ -305,7 +356,8 @@ describe('ProcessMessageUseCase', () => {
       messageText: 'Yes',
     });
 
-    const savedResponse = vi.mocked(leadResponseRepository.create).mock.calls[0][0];
+    const savedResponse = vi.mocked(leadResponseRepository.create).mock
+      .calls[0][0];
     expect(savedResponse.nodeOptionId).toBe('opt-1');
     expect(savedResponse.score).toBe(10);
   });
@@ -315,7 +367,11 @@ describe('ProcessMessageUseCase', () => {
   it('should finish the conversation after the last node', async () => {
     const kanban = makeKanban();
     const details = makeDetails([
-      { id: 'node-1', type: NodeType.QUESTION_FREE_INPUT, defaultNextNodeId: null },
+      {
+        id: 'node-1',
+        type: NodeType.QUESTION_FREE_INPUT,
+        defaultNextNodeId: null,
+      },
     ]);
 
     const conversation = makeConversation(kanban.id.toString());
@@ -323,8 +379,12 @@ describe('ProcessMessageUseCase', () => {
 
     vi.mocked(kanbanRepository.findByPhoneNumber).mockResolvedValue(kanban);
     vi.mocked(kanbanRepository.getDetails).mockResolvedValue(details);
-    vi.mocked(conversationRepository.findActive).mockResolvedValue(conversation);
-    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(progress);
+    vi.mocked(conversationRepository.findActive).mockResolvedValue(
+      conversation,
+    );
+    vi.mocked(progressRepository.findByConversationId).mockResolvedValue(
+      progress,
+    );
     vi.mocked(leadResponseRepository.create).mockResolvedValue();
     vi.mocked(conversationRepository.update).mockResolvedValue();
 
@@ -334,7 +394,8 @@ describe('ProcessMessageUseCase', () => {
       messageText: 'Final answer',
     });
 
-    const updatedConversation = vi.mocked(conversationRepository.update).mock.calls[0][0];
+    const updatedConversation = vi.mocked(conversationRepository.update).mock
+      .calls[0][0];
     expect(updatedConversation.isActive()).toBe(false);
   });
 

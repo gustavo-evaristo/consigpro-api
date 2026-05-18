@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { UUID } from 'src/domain/entities/vos';
 import { IKanbanRepository } from 'src/domain/repositories/kanban.repository';
 import { IKanbanStageRepository } from 'src/domain/repositories/kanban-stage.repository';
@@ -25,7 +29,8 @@ export class UpdateKanbanStageUseCase {
     if (!kanban.belongsTo(UUID.from(userId))) throw new ForbiddenException();
 
     const stage = await this.stageRepository.getById(stageId);
-    if (!stage || stage.kanbanId.value !== kanbanId) throw new NotFoundException('Estágio não encontrado');
+    if (!stage || stage.kanbanId.value !== kanbanId)
+      throw new NotFoundException('Estágio não encontrado');
 
     stage.update(title, color, order);
     await this.stageRepository.save(stage);

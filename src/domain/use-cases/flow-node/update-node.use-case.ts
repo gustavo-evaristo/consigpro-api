@@ -61,7 +61,16 @@ export class UpdateNodeUseCase {
       throw new Error('User does not own this flow');
     }
 
-    node.update({ type, content, defaultNextNodeId, kanbanStageId, postFillKanbanStageId, formId, x, y });
+    node.update({
+      type,
+      content,
+      defaultNextNodeId,
+      kanbanStageId,
+      postFillKanbanStageId,
+      formId,
+      x,
+      y,
+    });
     await this.flowNodeRepository.save(node);
 
     // Substituir opções (delete + create)

@@ -44,9 +44,7 @@ export class FormEntity {
     }
 
     this.userId =
-      props.userId instanceof UUID
-        ? props.userId
-        : UUID.from(props.userId);
+      props.userId instanceof UUID ? props.userId : UUID.from(props.userId);
 
     this.title = props.title;
     this.description = props.description ?? null;

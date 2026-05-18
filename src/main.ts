@@ -25,9 +25,9 @@ function assertNotPointingToProd() {
   // (ajuste se voce muda os nomes). Bloqueia se reconhecer prod.
   const hits: string[] = [];
   if (prodMatch(redis, /crucial-penguin-124486/)) hits.push('REDIS_URL=prod');
-  if (prodMatch(db, /consigpro(?!-dev)|consig\.pro/i)) hits.push('DATABASE_URL=prod');
+  if (prodMatch(db, /consigpro(?!-dev)|consig\.pro/i))
+    hits.push('DATABASE_URL=prod');
   if (hits.length > 0) {
-    // eslint-disable-next-line no-console
     console.error(
       `\n[ABORT] Tentando rodar em dev mas as URLs apontam para producao: ${hits.join(', ')}.\n` +
         `Use credenciais de dev (.env separado).\n` +

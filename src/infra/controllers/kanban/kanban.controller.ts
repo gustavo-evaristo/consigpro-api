@@ -11,7 +11,14 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from 'src/infra/authentication/jwt.guard';
-import { CreateKanbanDto, UpdateKanbanDto, CreateKanbanStageDto, UpdateKanbanStageDto, MoveLeadStageDto, ReorderKanbanStagesDto } from 'src/infra/dtos/kanban/kanban.dto';
+import {
+  CreateKanbanDto,
+  UpdateKanbanDto,
+  CreateKanbanStageDto,
+  UpdateKanbanStageDto,
+  MoveLeadStageDto,
+  ReorderKanbanStagesDto,
+} from 'src/infra/dtos/kanban/kanban.dto';
 import { CreateKanbanUseCase } from 'src/domain/use-cases/kanban/create-kanban.use-case';
 import { UpdateKanbanUseCase } from 'src/domain/use-cases/kanban/update-kanban.use-case';
 import { DeleteKanbanUseCase } from 'src/domain/use-cases/kanban/delete-kanban.use-case';
@@ -72,7 +79,11 @@ export class KanbanController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update kanban' })
-  async update(@Param('id') id: string, @Body() body: UpdateKanbanDto, @Req() { user }: IReq) {
+  async update(
+    @Param('id') id: string,
+    @Body() body: UpdateKanbanDto,
+    @Req() { user }: IReq,
+  ) {
     await this.updateKanban.execute({ userId: user.id, kanbanId: id, ...body });
     return { status: 'ok' };
   }
@@ -93,7 +104,10 @@ export class KanbanController {
   @Get(':id/stages')
   @ApiOperation({ summary: 'List kanban stages' })
   async stages(@Param('id') id: string, @Req() { user }: IReq) {
-    const stages = await this.listStages.execute({ userId: user.id, kanbanId: id });
+    const stages = await this.listStages.execute({
+      userId: user.id,
+      kanbanId: id,
+    });
     return stages.map((s) => ({
       id: s.id.toString(),
       kanbanId: s.kanbanId.toString(),
@@ -136,7 +150,12 @@ export class KanbanController {
     @Body() body: UpdateKanbanStageDto,
     @Req() { user }: IReq,
   ) {
-    await this.updateStage.execute({ userId: user.id, kanbanId: id, stageId, ...body });
+    await this.updateStage.execute({
+      userId: user.id,
+      kanbanId: id,
+      stageId,
+      ...body,
+    });
     return { status: 'ok' };
   }
 

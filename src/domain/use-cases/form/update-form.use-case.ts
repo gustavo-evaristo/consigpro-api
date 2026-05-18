@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { FormEntity } from 'src/domain/entities/form.entity';
-import { FormFieldEntity, FormFieldType } from 'src/domain/entities/form-field.entity';
+import {
+  FormFieldEntity,
+  FormFieldType,
+} from 'src/domain/entities/form-field.entity';
 import { FormFieldOptionEntity } from 'src/domain/entities/form-field-option.entity';
 import { IFormRepository } from 'src/domain/repositories/form.repository';
-import { UUID } from 'src/domain/entities/vos';
 
 interface FieldOptionInput {
   id?: string;
@@ -33,7 +35,13 @@ interface Input {
 export class UpdateFormUseCase {
   constructor(private readonly formRepository: IFormRepository) {}
 
-  async execute({ formId, userId, title, description, fields }: Input): Promise<FormEntity> {
+  async execute({
+    formId,
+    userId,
+    title,
+    description,
+    fields,
+  }: Input): Promise<FormEntity> {
     const form = await this.formRepository.get(formId, userId);
 
     if (!form) {
@@ -54,13 +62,14 @@ export class UpdateFormUseCase {
         order: i,
       });
 
-      field.options = (f.options ?? []).map((o, oi) =>
-        new FormFieldOptionEntity({
-          id: o.id,
-          fieldId: field.id,
-          label: o.label,
-          order: oi,
-        }),
+      field.options = (f.options ?? []).map(
+        (o, oi) =>
+          new FormFieldOptionEntity({
+            id: o.id,
+            fieldId: field.id,
+            label: o.label,
+            order: oi,
+          }),
       );
 
       return field;

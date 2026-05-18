@@ -101,8 +101,10 @@ export class FlowNodeEntity {
     this.type = props.type;
     this.content = props.content;
     this.defaultNextNodeId = props.defaultNextNodeId ?? null;
-    if (props.kanbanStageId !== undefined) this.kanbanStageId = props.kanbanStageId ?? null;
-    if (props.postFillKanbanStageId !== undefined) this.postFillKanbanStageId = props.postFillKanbanStageId ?? null;
+    if (props.kanbanStageId !== undefined)
+      this.kanbanStageId = props.kanbanStageId ?? null;
+    if (props.postFillKanbanStageId !== undefined)
+      this.postFillKanbanStageId = props.postFillKanbanStageId ?? null;
     if (props.formId !== undefined) this.formId = props.formId ?? null;
     if (props.x !== undefined) this.x = props.x;
     if (props.y !== undefined) this.y = props.y;

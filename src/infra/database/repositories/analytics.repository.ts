@@ -125,11 +125,26 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       newLeadsToday: Number(todayLeadsRow.count),
       totalLeads: Number(counts.totalLeads),
       totalInteractions: Number(counts.totalInteractions),
-      leadsByDate: leadsByDateRows.map((r) => ({ date: r.date, count: Number(r.count) })),
-      messagesByDay: messagesByDayRows.map((r) => ({ date: r.date, count: Number(r.count) })),
-      conversationStatus: statusRows.map((r) => ({ status: r.status, count: Number(r.count) })),
-      leadsByFlow: flowRows.map((r) => ({ flow: r.flow, count: Number(r.count) })),
-      messagesByHour: hourRows.map((r) => ({ hour: r.hour, count: Number(r.count) })),
+      leadsByDate: leadsByDateRows.map((r) => ({
+        date: r.date,
+        count: Number(r.count),
+      })),
+      messagesByDay: messagesByDayRows.map((r) => ({
+        date: r.date,
+        count: Number(r.count),
+      })),
+      conversationStatus: statusRows.map((r) => ({
+        status: r.status,
+        count: Number(r.count),
+      })),
+      leadsByFlow: flowRows.map((r) => ({
+        flow: r.flow,
+        count: Number(r.count),
+      })),
+      messagesByHour: hourRows.map((r) => ({
+        hour: r.hour,
+        count: Number(r.count),
+      })),
     };
   }
 }

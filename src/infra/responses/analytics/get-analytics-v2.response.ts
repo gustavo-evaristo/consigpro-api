@@ -30,7 +30,10 @@ export class WhatsappSessionResponse {
   @ApiProperty({ example: '5511999999999', nullable: true })
   phone: string | null;
 
-  @ApiProperty({ example: 'pending', enum: ['connected', 'pending', 'disconnected'] })
+  @ApiProperty({
+    example: 'pending',
+    enum: ['connected', 'pending', 'disconnected'],
+  })
   status: 'connected' | 'pending' | 'disconnected';
 }
 

@@ -24,9 +24,15 @@ export class QuickReplyRepository implements IQuickReplyRepository {
   }
 
   async getById(id: string): Promise<QuickReplyEntity | null> {
-    const row = await this.prismaService.quick_replies.findUnique({ where: { id } });
+    const row = await this.prismaService.quick_replies.findUnique({
+      where: { id },
+    });
     if (!row) return null;
-    return new QuickReplyEntity({ ...row, id: UUID.from(row.id), userId: UUID.from(row.userId) });
+    return new QuickReplyEntity({
+      ...row,
+      id: UUID.from(row.id),
+      userId: UUID.from(row.userId),
+    });
   }
 
   async create(quickReply: QuickReplyEntity): Promise<void> {

@@ -18,10 +18,12 @@ import { UpdateQuickReplyUseCase } from 'src/domain/use-cases/quick-reply/update
 import { DeleteQuickReplyUseCase } from 'src/domain/use-cases/quick-reply/delete-quick-reply.use-case';
 
 class QuickReplyDto {
-  @IsString() @IsNotEmpty()
+  @IsString()
+  @IsNotEmpty()
   shortcut: string;
 
-  @IsString() @IsNotEmpty()
+  @IsString()
+  @IsNotEmpty()
   content: string;
 }
 

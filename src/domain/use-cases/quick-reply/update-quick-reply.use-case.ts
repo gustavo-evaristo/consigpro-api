@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { UUID } from 'src/domain/entities/vos';
 import { IQuickReplyRepository } from 'src/domain/repositories/quick-reply.repository';
 

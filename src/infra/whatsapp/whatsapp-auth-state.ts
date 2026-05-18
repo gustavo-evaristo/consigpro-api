@@ -83,11 +83,11 @@ export async function useWhatsAppAuthState(
 
   const stored = await loadFromCacheOrDb(userId, repository, redis);
 
-  let creds = stored?.creds
+  const creds = stored?.creds
     ? JSON.parse(stored.creds, BufferJSON.reviver)
     : initAuthCreds();
 
-  let keys: Record<string, any> = stored?.keys
+  const keys: Record<string, any> = stored?.keys
     ? JSON.parse(stored.keys, BufferJSON.reviver)
     : {};
 

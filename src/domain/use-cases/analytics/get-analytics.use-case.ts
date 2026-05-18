@@ -14,7 +14,9 @@ export class GetAnalyticsUseCase {
 
   async execute({ userId, startDate, endDate }: Input) {
     const end = endDate ? endOfDay(endDate) : endOfDay(new Date());
-    const start = startDate ? startOfDay(startDate) : startOfDay(subDays(new Date(), 6));
+    const start = startDate
+      ? startOfDay(startDate)
+      : startOfDay(subDays(new Date(), 6));
     return this.analyticsRepository.getAnalytics(userId, start, end);
   }
 }

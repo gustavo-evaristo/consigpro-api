@@ -1,4 +1,8 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UUID } from 'src/domain/entities/vos';
 import { IKanbanRepository } from 'src/domain/repositories/kanban.repository';
 import { IKanbanStageRepository } from 'src/domain/repositories/kanban-stage.repository';
@@ -19,7 +23,12 @@ export class MoveLeadStageUseCase {
     private readonly progressRepository: IConversationProgressRepository,
   ) {}
 
-  async execute({ userId, kanbanId, conversationId, targetStageId }: Input): Promise<void> {
+  async execute({
+    userId,
+    kanbanId,
+    conversationId,
+    targetStageId,
+  }: Input): Promise<void> {
     const kanban = await this.kanbanRepository.getById(kanbanId);
     if (!kanban) throw new NotFoundException('Kanban não encontrado');
     if (!kanban.belongsTo(UUID.from(userId))) throw new ForbiddenException();
@@ -29,7 +38,8 @@ export class MoveLeadStageUseCase {
       throw new NotFoundException('Estágio não encontrado');
     }
 
-    const progress = await this.progressRepository.findByConversationId(conversationId);
+    const progress =
+      await this.progressRepository.findByConversationId(conversationId);
     if (!progress) throw new NotFoundException('Conversa não encontrada');
 
     progress.recordKanbanStage(targetStageId);

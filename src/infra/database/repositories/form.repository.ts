@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { IFormRepository, FormWithCount, FormResponseDetail } from 'src/domain/repositories/form.repository';
+import {
+  IFormRepository,
+  FormWithCount,
+  FormResponseDetail,
+} from 'src/domain/repositories/form.repository';
 import { FormEntity } from 'src/domain/entities/form.entity';
 import { FormFieldEntity } from 'src/domain/entities/form-field.entity';
 import { FormFieldOptionEntity } from 'src/domain/entities/form-field-option.entity';
@@ -196,7 +200,11 @@ export class FormRepository implements IFormRepository {
 
         // Soft-delete options no longer present
         await tx.form_field_options.updateMany({
-          where: { fieldId, isDeleted: false, id: { notIn: incomingOptionIds } },
+          where: {
+            fieldId,
+            isDeleted: false,
+            id: { notIn: incomingOptionIds },
+          },
           data: { isDeleted: true, updatedAt: new Date() },
         });
 

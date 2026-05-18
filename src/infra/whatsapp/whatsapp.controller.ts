@@ -30,10 +30,7 @@ export class WhatsappController {
   @ApiBearerAuth()
   @ApiBody({ type: StartWhatsappSessionDTO, required: false })
   @Post('start')
-  async start(
-    @Req() { user }: IReq,
-    @Body() body?: StartWhatsappSessionDTO,
-  ) {
+  async start(@Req() { user }: IReq, @Body() body?: StartWhatsappSessionDTO) {
     const userId = user.id;
     // Modo proxy: enfileira job pro wa-worker. Modo local (legado):
     // chama o WhatsappService que tem Baileys embutido.

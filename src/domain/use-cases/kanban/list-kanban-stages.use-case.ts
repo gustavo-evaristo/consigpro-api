@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { UUID } from 'src/domain/entities/vos';
 import { IKanbanRepository } from 'src/domain/repositories/kanban.repository';
 import { IKanbanStageRepository } from 'src/domain/repositories/kanban-stage.repository';

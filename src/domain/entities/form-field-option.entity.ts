@@ -29,9 +29,7 @@ export class FormFieldOptionEntity {
     }
 
     this.fieldId =
-      props.fieldId instanceof UUID
-        ? props.fieldId
-        : UUID.from(props.fieldId);
+      props.fieldId instanceof UUID ? props.fieldId : UUID.from(props.fieldId);
 
     this.isDeleted = props.isDeleted ?? false;
     this.label = props.label;

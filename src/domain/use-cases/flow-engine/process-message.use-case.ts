@@ -195,7 +195,7 @@ export class ProcessMessageUseCase {
 
     // Determinar próximo nó e salvar resposta
     let nodeOptionId: string | null = null;
-    let nextNodeId: string | null = null;
+    let nextNodeId: string | null;
     let score: number | null = null;
 
     if (

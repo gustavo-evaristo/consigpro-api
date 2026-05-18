@@ -18,7 +18,12 @@ export class KanbanRepository implements IKanbanRepository {
       orderBy: { createdAt: 'desc' },
     });
     return rows.map(
-      (r) => new KanbanEntity({ ...r, id: UUID.from(r.id), userId: UUID.from(r.userId) }),
+      (r) =>
+        new KanbanEntity({
+          ...r,
+          id: UUID.from(r.id),
+          userId: UUID.from(r.userId),
+        }),
     );
   }
 
@@ -87,7 +92,11 @@ export class KanbanRepository implements IKanbanRepository {
       where: { id, isDeleted: false },
     });
     if (!row) return null;
-    return new KanbanEntity({ ...row, id: UUID.from(row.id), userId: UUID.from(row.userId) });
+    return new KanbanEntity({
+      ...row,
+      id: UUID.from(row.id),
+      userId: UUID.from(row.userId),
+    });
   }
 
   async create(kanban: KanbanEntity): Promise<void> {

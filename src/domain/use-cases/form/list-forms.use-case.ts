@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { IFormRepository, FormWithCount } from 'src/domain/repositories/form.repository';
+import {
+  IFormRepository,
+  FormWithCount,
+} from 'src/domain/repositories/form.repository';
 
 interface Input {
   userId: string;

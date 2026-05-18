@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { Mutex } from 'async-mutex';
 import Redis from 'ioredis';
-import { randomUUID } from 'crypto';
 import { REDIS_SUB } from '../redis/redis.constants';
 import { ProcessMessageUseCase } from 'src/domain/use-cases/flow-engine/process-message.use-case';
 import { IMessageHistoryRepository } from 'src/domain/repositories/message-history.repository';
@@ -68,7 +67,9 @@ export class WaEventConsumerService
       return;
     }
     if (!this.sub) {
-      this.logger.warn('Redis sub indisponivel — events consumer nao iniciara.');
+      this.logger.warn(
+        'Redis sub indisponivel — events consumer nao iniciara.',
+      );
       return;
     }
     await this.sub.subscribe(
@@ -143,9 +144,7 @@ export class WaEventConsumerService
               );
             }
           })
-          .catch((err) =>
-            this.logger.error('Falha deactivateActive:', err),
-          );
+          .catch((err) => this.logger.error('Falha deactivateActive:', err));
       }
     }
   }
@@ -221,11 +220,10 @@ export class WaEventConsumerService
   }
 
   private async handleMessageStatus(p: WaMessageStatusPayload) {
-    const result =
-      await this.messageHistoryRepository.updateStatusByWhatsappId(
-        p.whatsappMessageId,
-        p.status as any,
-      );
+    const result = await this.messageHistoryRepository.updateStatusByWhatsappId(
+      p.whatsappMessageId,
+      p.status as any,
+    );
     if (result) {
       this.gateway.sendMessageStatus(p.userId, {
         conversationId: result.conversationId,

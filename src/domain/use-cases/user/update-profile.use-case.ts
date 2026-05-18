@@ -58,7 +58,7 @@ export class UpdateProfileUseCase {
 
     await this.userRepository.update(user);
 
-    let company = await this.companyRepository.get(user.companyId.toString());
+    const company = await this.companyRepository.get(user.companyId.toString());
 
     if (company && input.companyName && input.companyName !== company.name) {
       company.rename(input.companyName);

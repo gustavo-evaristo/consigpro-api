@@ -24,7 +24,13 @@ export class SubmitFormResponseUseCase {
     private readonly conversationProgressRepository: IConversationProgressRepository,
   ) {}
 
-  async execute({ token, answers, leadPhone, kanbanStageId, postFillKanbanStageId }: Input): Promise<void> {
+  async execute({
+    token,
+    answers,
+    leadPhone,
+    kanbanStageId,
+    postFillKanbanStageId,
+  }: Input): Promise<void> {
     const form = await this.formRepository.getByToken(token);
 
     if (!form) {
@@ -36,7 +42,10 @@ export class SubmitFormResponseUseCase {
       value: Array.isArray(a.value) ? a.value.join(', ') : a.value,
     }));
 
-    await this.formRepository.saveResponse(form.id.toString(), normalizedAnswers);
+    await this.formRepository.saveResponse(
+      form.id.toString(),
+      normalizedAnswers,
+    );
 
     const stageToRecord = postFillKanbanStageId ?? kanbanStageId;
     if (leadPhone && stageToRecord) {
@@ -46,9 +55,10 @@ export class SubmitFormResponseUseCase {
       );
 
       if (conversation) {
-        const progress = await this.conversationProgressRepository.findByConversationId(
-          conversation.id.toString(),
-        );
+        const progress =
+          await this.conversationProgressRepository.findByConversationId(
+            conversation.id.toString(),
+          );
 
         if (progress) {
           progress.recordKanbanStage(stageToRecord);

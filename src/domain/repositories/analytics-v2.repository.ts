@@ -7,10 +7,7 @@ export interface LiveActivityItem {
   timestamp: Date;
 }
 
-export type WhatsappSessionStatus =
-  | 'connected'
-  | 'pending'
-  | 'disconnected';
+export type WhatsappSessionStatus = 'connected' | 'pending' | 'disconnected';
 
 export interface WhatsappSessionItem {
   flowId: string;

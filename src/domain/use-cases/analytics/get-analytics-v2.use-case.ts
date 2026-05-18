@@ -30,9 +30,7 @@ interface Input {
 
 @Injectable()
 export class GetAnalyticsV2UseCase {
-  constructor(
-    private readonly analyticsV2Repository: IAnalyticsV2Repository,
-  ) {}
+  constructor(private readonly analyticsV2Repository: IAnalyticsV2Repository) {}
 
   async execute({
     userId,

@@ -4,9 +4,7 @@ import { IWhatsAppSessionRepository } from 'src/domain/repositories/whatsapp-ses
 
 @Injectable()
 export class WhatsappStatusRepository implements IWhatsappStatusRepository {
-  constructor(
-    private readonly sessionRepository: IWhatsAppSessionRepository,
-  ) {}
+  constructor(private readonly sessionRepository: IWhatsAppSessionRepository) {}
 
   async getConnectedPhone(userId: string): Promise<string | null> {
     const info = await this.sessionRepository.getConnectionInfo(userId);

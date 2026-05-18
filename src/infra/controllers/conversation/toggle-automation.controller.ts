@@ -17,7 +17,9 @@ export class ToggleAutomationController {
   constructor(private readonly toggleAutomation: ToggleAutomationUseCase) {}
 
   @Patch(':id/automation')
-  @ApiOperation({ summary: 'Enable or disable bot automation for a conversation' })
+  @ApiOperation({
+    summary: 'Enable or disable bot automation for a conversation',
+  })
   async toggle(
     @Param('id') id: string,
     @Body() body: ToggleAutomationDto,

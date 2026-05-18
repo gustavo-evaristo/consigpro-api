@@ -1,4 +1,11 @@
-import { Controller, Delete, HttpCode, Param, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  HttpCode,
+  Param,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiNoContentResponse,

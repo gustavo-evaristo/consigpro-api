@@ -15,9 +15,7 @@ class DuplicateFlowResponse {
 @ApiTags('Flow')
 @Controller('flow')
 export class DuplicateFlowController {
-  constructor(
-    private readonly duplicateFlowUseCase: DuplicateFlowUseCase,
-  ) {}
+  constructor(private readonly duplicateFlowUseCase: DuplicateFlowUseCase) {}
 
   @ApiOperation({ summary: 'Duplicate a flow with all its nodes' })
   @ApiOkResponse({ type: DuplicateFlowResponse })

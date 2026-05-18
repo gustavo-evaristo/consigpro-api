@@ -6,7 +6,7 @@ export class Password {
   private static readonly SALT_ROUNDS = 10;
   private static readonly MIN_LENGTH = 6;
   private static readonly SPECIAL_CHAR_REGEX =
-    /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=~`]/;
+    /[!@#$%^&*(),.?":{}|<>_\-\\[\]/+=~`]/;
 
   private constructor(value: string) {
     this._value = value;

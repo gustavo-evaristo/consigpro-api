@@ -51,10 +51,7 @@ export class MediaStorageService {
       return null;
     }
 
-    const encodedPath = path
-      .split('/')
-      .map(encodeURIComponent)
-      .join('/');
+    const encodedPath = path.split('/').map(encodeURIComponent).join('/');
     const url = `${this.supabaseUrl}/storage/v1/object/${this.bucket}/${encodedPath}`;
 
     try {

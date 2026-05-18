@@ -17,7 +17,13 @@ export class UpdateFlowUseCase {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute({ id, userId, title, description, kanbanId }: Input): Promise<FlowEntity> {
+  async execute({
+    id,
+    userId,
+    title,
+    description,
+    kanbanId,
+  }: Input): Promise<FlowEntity> {
     const user = await this.userRepository.get(userId);
 
     if (!user) {

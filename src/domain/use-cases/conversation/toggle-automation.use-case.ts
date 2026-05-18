@@ -1,4 +1,8 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { IConversationRepository } from 'src/domain/repositories/conversation.repository';
 
 interface Input {
@@ -9,10 +13,13 @@ interface Input {
 
 @Injectable()
 export class ToggleAutomationUseCase {
-  constructor(private readonly conversationRepository: IConversationRepository) {}
+  constructor(
+    private readonly conversationRepository: IConversationRepository,
+  ) {}
 
   async execute({ userId, conversationId, enabled }: Input): Promise<void> {
-    const conversation = await this.conversationRepository.findById(conversationId);
+    const conversation =
+      await this.conversationRepository.findById(conversationId);
     if (!conversation) throw new NotFoundException('Conversa não encontrada');
     if (conversation.flowUserId !== userId) throw new ForbiddenException();
 
@@ -21,7 +28,9 @@ export class ToggleAutomationUseCase {
       conversation.leadPhoneNumber,
     );
 
-    const target = entity ?? (await this.conversationRepository.findByIdAsEntity(conversationId));
+    const target =
+      entity ??
+      (await this.conversationRepository.findByIdAsEntity(conversationId));
 
     if (!target) throw new NotFoundException('Conversa não encontrada');
 

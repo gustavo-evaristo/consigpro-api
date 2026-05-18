@@ -22,10 +22,7 @@ import {
   invalidateAuthCache,
   useWhatsAppAuthState,
 } from './whatsapp-auth-state';
-import {
-  AcquiredLock,
-  RedisLockService,
-} from '../redis/redis-lock.service';
+import { AcquiredLock, RedisLockService } from '../redis/redis-lock.service';
 import { MediaStorageService } from '../storage/media-storage.service';
 import { WaJobProducerService } from '../wa-bridge/wa-job-producer.service';
 import { isWaWorkerEnabled } from '../wa-bridge/wa-bridge.constants';
@@ -583,9 +580,7 @@ export class WhatsappService {
             await invalidateAuthCache(userId, this.redis);
             this.stores.delete(userId);
             await this.releaseSessionLock(userId);
-          } else if (
-            statusCode === DisconnectReason.connectionReplaced
-          ) {
+          } else if (statusCode === DisconnectReason.connectionReplaced) {
             // Outra instância (ou outro processo no celular do cliente)
             // assumiu a sessão. NÃO reconectamos automaticamente: isso só
             // alimenta o ping-pong de "Stream Errored (conflict)" que era
@@ -783,11 +778,7 @@ export class WhatsappService {
 
     // Se não há socket nem reconexão em andamento e somos o líder, dispara uma.
     const initial = this.sessions.get(userId);
-    if (
-      !initial &&
-      !this.pendingSessions.has(userId) &&
-      this.leaderMode
-    ) {
+    if (!initial && !this.pendingSessions.has(userId) && this.leaderMode) {
       this.logger.warn(
         `[BAILEYS-CONN] sendMessage sem sessão ativa — disparando startSession (userId: ${userId})`,
       );
@@ -915,10 +906,7 @@ export class WhatsappService {
    *
    * Cache de 15 min para não consultar a cada mensagem.
    */
-  private async resolveJid(
-    sock: WASocket,
-    phone: string,
-  ): Promise<string> {
+  private async resolveJid(sock: WASocket, phone: string): Promise<string> {
     const cleanPhone = phone.replace('+', '');
     const fallbackJid = cleanPhone + '@s.whatsapp.net';
 
@@ -1066,8 +1054,8 @@ export class WhatsappService {
       innerMessage?.templateButtonReplyMessage?.selectedDisplayText ||
       innerMessage?.templateMessage?.hydratedTemplate?.hydratedContentText ||
       innerMessage?.templateMessage?.fourRowTemplate?.content?.conversation ||
-      innerMessage?.templateMessage?.fourRowTemplate?.content?.extendedTextMessage
-        ?.text ||
+      innerMessage?.templateMessage?.fourRowTemplate?.content
+        ?.extendedTextMessage?.text ||
       innerMessage?.interactiveMessage?.body?.text ||
       innerMessage?.reactionMessage?.text ||
       null;
@@ -1127,7 +1115,12 @@ export class WhatsappService {
     // flow. Nao bloqueia o processamento — se falhar, mensagem entra so
     // como texto.
     const mediaUrl = isImage
-      ? await this.maybeUploadIncomingImage(userId, message, innerMessage, wppId)
+      ? await this.maybeUploadIncomingImage(
+          userId,
+          message,
+          innerMessage,
+          wppId,
+        )
       : null;
     const mediaType: 'image' | null = isImage && mediaUrl ? 'image' : null;
 
@@ -1183,11 +1176,7 @@ export class WhatsappService {
         });
       }
 
-      if (
-        conversationId &&
-        resolvedUserId &&
-        messagesToSend.length > 0
-      ) {
+      if (conversationId && resolvedUserId && messagesToSend.length > 0) {
         // Enfileira no outbox em vez de enviar inline.
         // O OutboundWorkerService cuida do envio com retry/backoff e persiste
         // message_history (BOT) somente após confirmação de envio.
