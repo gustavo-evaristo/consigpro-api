@@ -33,7 +33,7 @@ export class LeaderElectionService
   async onModuleInit() {
     if (isWaWorkerEnabled()) {
       this.logger.log(
-        '[Leader] WA_WORKER_ENABLED=true — leader election desabilitado no bot-api (wa-worker assumiu).',
+        '[Leader] WA_WORKER_ENABLED=true — leader election desabilitado no consigpro-api (wa-worker assumiu).',
       );
       return;
     }

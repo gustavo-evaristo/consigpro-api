@@ -7,7 +7,7 @@ import { ServerOptions } from 'socket.io';
 /**
  * Substitui o IoAdapter padrão do Nest para que eventos de Socket.IO
  * emitidos em uma instância da API sejam propagados às demais via Redis
- * Pub/Sub. Sem isso, ao escalar `bot-api` para 2+ máquinas, clientes
+ * Pub/Sub. Sem isso, ao escalar `consigpro-api` para 2+ máquinas, clientes
  * conectados na máquina A não recebem eventos enviados pela máquina B.
  */
 export class RedisIoAdapter extends IoAdapter {

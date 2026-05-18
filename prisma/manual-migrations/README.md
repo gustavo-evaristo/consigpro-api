@@ -9,8 +9,9 @@ Editor ou `psql` quando estiver pronto.
 Remove a tabela `instance_lock` que era usada pelo `LeaderElectionService`.
 
 **Quando aplicar:**
+
 1. `wa-worker` rodando em produção há >= 24h sem incidentes.
-2. `WA_WORKER_ENABLED=true` no `bot-api` há >= 24h.
+2. `WA_WORKER_ENABLED=true` no `consigpro-api` há >= 24h.
 3. `LeaderElectionService` removido do código (PR separada — não foi
    feita ainda, ver Etapa 7 do plano).
 

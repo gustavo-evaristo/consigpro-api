@@ -32,7 +32,7 @@ export class OutboundWorkerService {
 
   @Interval(2_000)
   async tick() {
-    // No modo proxy, qualquer instancia do bot-api pode processar o outbound
+    // No modo proxy, qualquer instancia do consigpro-api pode processar o outbound
     // — nao depende mais da leader election (o lock granular esta no wa-worker).
     if (!isWaWorkerEnabled() && !this.leaderElection.isLeader()) return;
     if (this.running) return;

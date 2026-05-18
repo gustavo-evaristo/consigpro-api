@@ -17,7 +17,7 @@ import {
 } from './wa-bridge.constants';
 
 /**
- * Producer BullMQ — bot-api enfileira jobs para o wa-worker consumir.
+ * Producer BullMQ — consigpro-api enfileira jobs para o wa-worker consumir.
  * Usado quando WA_WORKER_ENABLED=true. Quando false, o WhatsappService
  * antigo (com Baileys local) continua sendo usado.
  */

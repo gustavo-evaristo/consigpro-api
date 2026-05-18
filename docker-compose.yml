@@ -1,14 +1,14 @@
 services:
   redis:
     image: redis:7-alpine
-    container_name: bot-api-redis
+    container_name: consigpro-api-redis
     ports:
-      - "6379:6379"
+      - '6379:6379'
     restart: unless-stopped
     volumes:
       - redis-data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
       timeout: 3s
       retries: 5
@@ -16,7 +16,7 @@ services:
   api:
     build: .
     ports:
-      - "${PORT:-3000}:3000"
+      - '${PORT:-3000}:3000'
     env_file:
       - .env
     environment:

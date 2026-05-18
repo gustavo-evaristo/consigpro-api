@@ -1,4 +1,4 @@
-app = 'bot-api-test'
+app = 'consigpro-api-test'
 primary_region = 'gru'
 
 [build]

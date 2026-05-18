@@ -1,4 +1,4 @@
-# bot-api
+# consigpro-api
 
 Backend API for a WhatsApp bot platform. Allows users to build conversation flows (Kanbans) that are executed automatically when leads message the connected WhatsApp number.
 
@@ -12,16 +12,16 @@ Each user connects their own WhatsApp number. When a lead sends a message to tha
 
 ### Core concepts
 
-| Concept | Description |
-|---|---|
-| **Kanban** | A bot flow. Must have a `phoneNumber` to be activated. |
-| **Stage** | An ordered step within a Kanban. |
-| **StageContent** | A content item inside a Stage. Types: `TEXT`, `MULTIPLE_CHOICE`, `FREE_INPUT`. |
-| **Answer** | Options for `MULTIPLE_CHOICE` contents, each with a `score`. |
-| **Conversation** | A session between a lead and a Kanban. Has `ACTIVE` or `FINISHED` status. |
+| Concept                  | Description                                                                            |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| **Kanban**               | A bot flow. Must have a `phoneNumber` to be activated.                                 |
+| **Stage**                | An ordered step within a Kanban.                                                       |
+| **StageContent**         | A content item inside a Stage. Types: `TEXT`, `MULTIPLE_CHOICE`, `FREE_INPUT`.         |
+| **Answer**               | Options for `MULTIPLE_CHOICE` contents, each with a `score`.                           |
+| **Conversation**         | A session between a lead and a Kanban. Has `ACTIVE` or `FINISHED` status.              |
 | **ConversationProgress** | Tracks the current position in the flow and whether the bot is waiting for a response. |
-| **LeadResponse** | A lead's reply to a question content, with optional linked answer and score. |
-| **MessageHistory** | Full message log for a conversation (both BOT and LEAD messages). |
+| **LeadResponse**         | A lead's reply to a question content, with optional linked answer and score.           |
+| **MessageHistory**       | Full message log for a conversation (both BOT and LEAD messages).                      |
 
 ---
 
@@ -176,22 +176,22 @@ Swagger UI is available at `/api` when the server is running.
 
 `WhatsappGateway` emits events scoped to each user's room (`userId`):
 
-| Event | Payload | When |
-|---|---|---|
-| `qr` | base64 PNG data URL | QR code ready to scan |
-| `status` | `"CONNECTED"` \| `"DISCONNECTED"` | Connection state changes |
+| Event         | Payload                                          | When                         |
+| ------------- | ------------------------------------------------ | ---------------------------- |
+| `qr`          | base64 PNG data URL                              | QR code ready to scan        |
+| `status`      | `"CONNECTED"` \| `"DISCONNECTED"`                | Connection state changes     |
 | `new-message` | `{ conversationId, sender, content, createdAt }` | Any message sent or received |
 
 ---
 
 ## API Modules
 
-| Module | Routes | Auth |
-|---|---|---|
-| Users | `POST /users`, `POST /auth/login`, `GET /users/me` | Public / JWT |
-| Kanbans | CRUD + activate/deactivate/duplicate | JWT |
-| Stages | CRUD | JWT |
-| Stage Contents | CRUD | JWT |
-| Conversations | List, get details, list leads, send message | JWT |
-| Analytics | Get summary | JWT |
-| WhatsApp | `POST /whatsapp/start`, `DELETE /whatsapp/logout` | JWT |
+| Module         | Routes                                             | Auth         |
+| -------------- | -------------------------------------------------- | ------------ |
+| Users          | `POST /users`, `POST /auth/login`, `GET /users/me` | Public / JWT |
+| Kanbans        | CRUD + activate/deactivate/duplicate               | JWT          |
+| Stages         | CRUD                                               | JWT          |
+| Stage Contents | CRUD                                               | JWT          |
+| Conversations  | List, get details, list leads, send message        | JWT          |
+| Analytics      | Get summary                                        | JWT          |
+| WhatsApp       | `POST /whatsapp/start`, `DELETE /whatsapp/logout`  | JWT          |
