@@ -157,6 +157,7 @@ export class KanbanRepository implements IKanbanRepository {
         JOIN conversation_progress cp ON cp."conversationId" = c.id
           AND cp."lastKanbanStageId" IS NOT NULL
         WHERE c."isDeleted" = false
+          AND c."leadPhoneNumber" ~ '^\+\d{10,15}$'
         ORDER BY c."leadPhoneNumber", c."updatedAt" DESC
       ) sub
       ORDER BY sub."stageEnteredAt" DESC

@@ -1,4 +1,18 @@
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: bot-api-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   api:
     build: .
     ports:
@@ -7,3 +21,9 @@ services:
       - .env
     environment:
       NODE_ENV: production
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  redis-data:
