@@ -1,20 +1,25 @@
-app = 'consigpro-api-test'
+# fly.toml app configuration file generated for consigpro-api on 2026-05-18T18:51:36Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'consigpro-api'
 primary_region = 'gru'
 
 [build]
 
 [env]
-  PORT = "3000"
-  NODE_ENV = "production"
-  FRONTEND_URL = "https://app.consig.pro"
+  FRONTEND_URL = 'https://app.consig.pro'
+  NODE_ENV = 'production'
+  PORT = '3000'
 
 [http_service]
   internal_port = 3000
   force_https = true
-  auto_stop_machines = "off"
+  auto_stop_machines = 'off'
   auto_start_machines = false
   min_machines_running = 1
 
 [[vm]]
-  size = "shared-cpu-1x"
-  memory = "1gb"
+  size = 'shared-cpu-1x'
+  memory = '1gb'
