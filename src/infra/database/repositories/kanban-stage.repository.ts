@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { KanbanStageEntity } from 'src/domain/entities/kanban-stage.entity';
 import { UUID } from 'src/domain/entities/vos';
-import { IKanbanStageRepository } from 'src/domain/repositories/kanban-stage.repository';
+import {
+  IKanbanStageRepository,
+  KanbanStageUsage,
+} from 'src/domain/repositories/kanban-stage.repository';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -69,5 +72,45 @@ export class KanbanStageRepository implements IKanbanStageRepository {
       _max: { order: true },
     });
     return result._max.order ?? 0;
+  }
+
+  async getUsage(stageId: string): Promise<KanbanStageUsage> {
+    const [leadsCount, flowNodesCount] = await Promise.all([
+      this.prismaService.conversation_progress.count({
+        where: { lastKanbanStageId: stageId },
+      }),
+      this.prismaService.flow_nodes.count({
+        where: {
+          OR: [{ kanbanStageId: stageId }, { postFillKanbanStageId: stageId }],
+        },
+      }),
+    ]);
+    return { leadsCount, flowNodesCount };
+  }
+
+  async reassignAndDelete(
+    stageId: string,
+    targetStageId: string | null,
+  ): Promise<void> {
+    await this.prismaService.$transaction(async (tx) => {
+      // Migra leads que estavam neste estágio para o destino (ou null)
+      await tx.conversation_progress.updateMany({
+        where: { lastKanbanStageId: stageId },
+        data: { lastKanbanStageId: targetStageId },
+      });
+      // Migra nós de fluxo que apontavam para este estágio
+      await tx.flow_nodes.updateMany({
+        where: { kanbanStageId: stageId },
+        data: { kanbanStageId: targetStageId },
+      });
+      await tx.flow_nodes.updateMany({
+        where: { postFillKanbanStageId: stageId },
+        data: { postFillKanbanStageId: targetStageId },
+      });
+      await tx.kanban_stages.update({
+        where: { id: stageId },
+        data: { isDeleted: true, updatedAt: new Date() },
+      });
+    });
   }
 }

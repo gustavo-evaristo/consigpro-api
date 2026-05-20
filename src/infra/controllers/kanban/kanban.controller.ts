@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import {
   UpdateKanbanDto,
   CreateKanbanStageDto,
   UpdateKanbanStageDto,
+  DeleteKanbanStageDto,
   MoveLeadStageDto,
   ReorderKanbanStagesDto,
 } from 'src/infra/dtos/kanban/kanban.dto';
@@ -160,13 +162,22 @@ export class KanbanController {
   }
 
   @Delete(':id/stages/:stageId')
-  @ApiOperation({ summary: 'Delete kanban stage' })
+  @ApiOperation({
+    summary:
+      'Exclui um estágio. Se houver leads ou nós de fluxo vinculados, exige targetStageId.',
+  })
   async deleteStageHandler(
     @Param('id') id: string,
     @Param('stageId') stageId: string,
+    @Query() query: DeleteKanbanStageDto,
     @Req() { user }: IReq,
   ) {
-    await this.deleteStage.execute({ userId: user.id, kanbanId: id, stageId });
+    await this.deleteStage.execute({
+      userId: user.id,
+      kanbanId: id,
+      stageId,
+      targetStageId: query.targetStageId,
+    });
     return { status: 'ok' };
   }
 

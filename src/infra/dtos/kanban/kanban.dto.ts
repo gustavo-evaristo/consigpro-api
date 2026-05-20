@@ -68,6 +68,16 @@ export class UpdateKanbanStageDto {
   color?: string;
 }
 
+export class DeleteKanbanStageDto {
+  @ApiPropertyOptional({
+    description:
+      'ID da coluna de destino para onde os leads/nós de fluxo serão movidos. Obrigatório se a coluna excluída tiver leads ou nós vinculados.',
+  })
+  @IsOptional()
+  @IsString()
+  targetStageId?: string;
+}
+
 export class MoveLeadStageDto {
   @ApiProperty({ description: 'ID do estágio de destino' })
   @IsString()
