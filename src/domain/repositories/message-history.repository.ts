@@ -25,4 +25,7 @@ export abstract class IMessageHistoryRepository {
   abstract findUnreadLeadMessages(
     conversationId: string,
   ): Promise<MessageHistoryEntity[]>;
+  abstract findByWhatsappId(
+    whatsappMessageId: string,
+  ): Promise<MessageHistoryEntity | null>;
 }

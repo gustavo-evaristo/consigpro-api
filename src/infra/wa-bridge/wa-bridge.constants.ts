@@ -8,6 +8,12 @@ export const WA_EVENT_QR = 'wa:event:qr';
 export const WA_EVENT_STATUS = 'wa:event:status';
 export const WA_EVENT_MESSAGE_RECEIVED = 'wa:event:message.received';
 export const WA_EVENT_MESSAGE_STATUS = 'wa:event:message.status';
+// Mensagem enviada pelo proprio numero conectado a partir do WhatsApp
+// Business app no celular (key.fromMe=true). Sincronizada para o app web sem
+// rodar o fluxo. Pode tambem ecoar mensagens enviadas pelo proprio app web —
+// o consumer faz dedupe por whatsappMessageId.
+export const WA_EVENT_MESSAGE_SENT_FROM_PHONE =
+  'wa:event:message.sent_from_phone';
 
 export interface StartSessionJobData {
   userId: string;
@@ -53,6 +59,17 @@ export interface WaMessageStatusPayload {
   userId: string;
   whatsappMessageId: string;
   status: 'PENDING' | 'SENT' | 'DELIVERED' | 'READ' | 'FAILED';
+}
+
+export interface WaMessageSentFromPhonePayload {
+  userId: string;
+  whatsappMessageId: string | null;
+  botPhoneNumber: string;
+  leadPhoneNumber: string;
+  text: string;
+  mediaUrl: string | null;
+  mediaType: 'image' | null;
+  sentAt: string;
 }
 
 export const WA_WORKER_ENABLED_KEY = 'WA_WORKER_ENABLED';

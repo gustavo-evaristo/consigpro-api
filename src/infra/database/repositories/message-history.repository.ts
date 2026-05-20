@@ -84,6 +84,15 @@ export class MessageHistoryRepository implements IMessageHistoryRepository {
     };
   }
 
+  async findByWhatsappId(
+    whatsappMessageId: string,
+  ): Promise<MessageHistoryEntity | null> {
+    const r = await this.prismaService.message_history.findUnique({
+      where: { whatsappMessageId },
+    });
+    return r ? this.toEntity(r) : null;
+  }
+
   async findUnreadLeadMessages(
     conversationId: string,
   ): Promise<MessageHistoryEntity[]> {

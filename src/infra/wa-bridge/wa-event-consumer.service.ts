@@ -13,19 +13,23 @@ import { IMessageHistoryRepository } from 'src/domain/repositories/message-histo
 import { IPendingOutboundMessageRepository } from 'src/domain/repositories/pending-outbound-message.repository';
 import { IWhatsAppSessionRepository } from 'src/domain/repositories/whatsapp-session.repository';
 import { IFlowRepository } from 'src/domain/repositories/flow.repository';
+import { IConversationRepository } from 'src/domain/repositories/conversation.repository';
 import {
   MessageHistoryEntity,
   MessageSender,
   MessageStatus,
 } from 'src/domain/entities/message-history.entity';
+import { ConversationEntity } from 'src/domain/entities/conversation.entity';
 import { UUID } from 'src/domain/entities/vos';
 import { WhatsappGateway } from '../whatsapp/whatsapp.gateway';
 import {
   WA_EVENT_MESSAGE_RECEIVED,
+  WA_EVENT_MESSAGE_SENT_FROM_PHONE,
   WA_EVENT_MESSAGE_STATUS,
   WA_EVENT_QR,
   WA_EVENT_STATUS,
   WaMessageReceivedPayload,
+  WaMessageSentFromPhonePayload,
   WaMessageStatusPayload,
   WaQrEventPayload,
   WaStatusEventPayload,
@@ -57,6 +61,7 @@ export class WaEventConsumerService
     private readonly outboundRepository: IPendingOutboundMessageRepository,
     private readonly flowRepository: IFlowRepository,
     private readonly sessionRepository: IWhatsAppSessionRepository,
+    private readonly conversationRepository: IConversationRepository,
   ) {}
 
   async onModuleInit() {
@@ -77,6 +82,7 @@ export class WaEventConsumerService
       WA_EVENT_STATUS,
       WA_EVENT_MESSAGE_RECEIVED,
       WA_EVENT_MESSAGE_STATUS,
+      WA_EVENT_MESSAGE_SENT_FROM_PHONE,
     );
     this.sub.on('message', (channel, message) => {
       this.handleEvent(channel, message).catch((err) =>
@@ -103,6 +109,8 @@ export class WaEventConsumerService
         return this.handleMessageReceived(payload);
       case WA_EVENT_MESSAGE_STATUS:
         return this.handleMessageStatus(payload);
+      case WA_EVENT_MESSAGE_SENT_FROM_PHONE:
+        return this.handleMessageSentFromPhone(payload);
     }
   }
 
@@ -216,6 +224,103 @@ export class WaEventConsumerService
           })),
         );
       }
+    });
+  }
+
+  /**
+   * Mensagem enviada pelo proprio numero conectado a partir do WhatsApp
+   * Business no celular (ou eco de mensagem enviada pelo proprio app web).
+   * Persiste em message_history com sender=BOT, deduplicando por
+   * whatsappMessageId — assim mensagens ja salvas pelo fluxo de envio do app
+   * nao sao duplicadas. Nao roda fluxo: e atendimento manual.
+   */
+  private async handleMessageSentFromPhone(p: WaMessageSentFromPhonePayload) {
+    if (!p.whatsappMessageId) {
+      this.logger.warn(
+        `Mensagem fromMe sem whatsappMessageId — ignorada (bot: ${p.botPhoneNumber}, lead: ${p.leadPhoneNumber})`,
+      );
+      return;
+    }
+
+    // Dedupe antes de qualquer coisa: mensagens enviadas pelo proprio app web
+    // ja foram persistidas pelo SendMessageUseCase/OutboundWorker com o mesmo
+    // whatsappMessageId. O eco do Baileys nao deve criar duplicata.
+    const existing = await this.messageHistoryRepository.findByWhatsappId(
+      p.whatsappMessageId,
+    );
+    if (existing) return;
+
+    const mutex = this.getLeadMutex(p.botPhoneNumber, p.leadPhoneNumber);
+    await mutex.runExclusive(async () => {
+      // Re-checa dedupe dentro do lock (caso eco do web tenha chegado entre
+      // a primeira verificacao e a aquisicao do mutex).
+      const again = await this.messageHistoryRepository.findByWhatsappId(
+        p.whatsappMessageId!,
+      );
+      if (again) return;
+
+      const flow = await this.flowRepository.findByPhoneNumber(
+        p.botPhoneNumber,
+      );
+      if (!flow) {
+        this.logger.warn(
+          `Mensagem do celular ignorada — sem flow para ${p.botPhoneNumber} (lead: ${p.leadPhoneNumber})`,
+        );
+        return;
+      }
+      if (flow.userId.toString() !== p.userId) {
+        this.logger.warn(
+          `Mensagem do celular descartada — flow ${flow.id.toString()} pertence a ${flow.userId.toString()}, evento userId=${p.userId}`,
+        );
+        return;
+      }
+
+      let conversation = await this.conversationRepository.findActive(
+        flow.id.toString(),
+        p.leadPhoneNumber,
+      );
+
+      if (!conversation) {
+        // Atendimento iniciado pelo celular para um lead sem conversa ativa.
+        // Cria nova conversa com automation desligada — o fluxo nao deve
+        // assumir um atendimento que o humano comecou manualmente.
+        conversation = new ConversationEntity({
+          flowId: flow.id,
+          leadPhoneNumber: p.leadPhoneNumber,
+          leadName: null,
+          automationEnabled: false,
+        });
+        await this.conversationRepository.create(conversation);
+        this.logger.log(
+          `Nova conversa criada via celular — flow=${flow.id.toString()} lead=${p.leadPhoneNumber}`,
+        );
+      }
+
+      const conversationId = conversation.id.toString();
+
+      await this.messageHistoryRepository.create(
+        new MessageHistoryEntity({
+          conversationId: UUID.from(conversationId),
+          sender: MessageSender.BOT,
+          content: p.text,
+          whatsappMessageId: p.whatsappMessageId,
+          status: MessageStatus.SENT,
+          mediaUrl: p.mediaUrl,
+          mediaType: p.mediaType as any,
+          createdAt: new Date(p.sentAt),
+        }),
+      );
+
+      this.gateway.sendNewMessage(p.userId, {
+        conversationId,
+        sender: 'BOT',
+        content: p.text,
+        createdAt: new Date(p.sentAt),
+        whatsappMessageId: p.whatsappMessageId,
+        status: 'SENT',
+        mediaUrl: p.mediaUrl,
+        mediaType: p.mediaType,
+      });
     });
   }
 
