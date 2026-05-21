@@ -249,7 +249,7 @@ export class FormRepository implements IFormRepository {
         answers: {
           include: {
             field: {
-              select: { label: true, type: true, isDeleted: true },
+              select: { label: true, type: true, isDeleted: true, order: true },
             },
           },
         },
@@ -261,6 +261,7 @@ export class FormRepository implements IFormRepository {
       createdAt: r.createdAt,
       answers: r.answers
         .filter((a) => !a.field.isDeleted)
+        .sort((a, b) => a.field.order - b.field.order)
         .map((a) => ({
           fieldId: a.fieldId,
           fieldLabel: a.field.label,
