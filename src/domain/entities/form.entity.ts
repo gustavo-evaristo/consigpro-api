@@ -69,6 +69,11 @@ export class FormEntity {
     this.touch();
   }
 
+  setActive(isActive: boolean) {
+    this.isActive = isActive;
+    this.touch();
+  }
+
   delete() {
     this.isDeleted = true;
     this.touch();

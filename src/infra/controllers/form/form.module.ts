@@ -11,6 +11,7 @@ import {
   SubmitFormResponseUseCase,
   ListFormResponsesUseCase,
   DeleteFormResponseUseCase,
+  SetFormActiveUseCase,
 } from 'src/domain/use-cases';
 import { CreateFormController } from './create-form.controller';
 import { ListFormsController } from './list-forms.controller';
@@ -21,6 +22,7 @@ import { GetPublicFormController } from './get-public-form.controller';
 import { SubmitFormResponseController } from './submit-form-response.controller';
 import { ListFormResponsesController } from './list-form-responses.controller';
 import { DeleteFormResponseController } from './delete-form-response.controller';
+import { SetFormActiveController } from './set-form-active.controller';
 
 @Module({
   providers: [
@@ -33,6 +35,7 @@ import { DeleteFormResponseController } from './delete-form-response.controller'
     SubmitFormResponseUseCase,
     ListFormResponsesUseCase,
     DeleteFormResponseUseCase,
+    SetFormActiveUseCase,
   ],
   controllers: [
     CreateFormController,
@@ -44,6 +47,7 @@ import { DeleteFormResponseController } from './delete-form-response.controller'
     SubmitFormResponseController,
     ListFormResponsesController,
     DeleteFormResponseController,
+    SetFormActiveController,
   ],
   imports: [DatabaseModule, AuthenticationModule],
 })

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import * as Boom from '@hapi/boom';
 import { FormEntity } from 'src/domain/entities/form.entity';
 import { IFormRepository } from 'src/domain/repositories/form.repository';
 
@@ -14,7 +15,13 @@ export class GetPublicFormUseCase {
     const form = await this.formRepository.getByToken(token);
 
     if (!form) {
-      throw new Error('Form not found');
+      throw Boom.notFound('Formulário não encontrado');
+    }
+
+    if (!form.isActive) {
+      throw Boom.forbidden('Formulário não está disponível no momento', {
+        code: 'FORM_INACTIVE',
+      });
     }
 
     return form;

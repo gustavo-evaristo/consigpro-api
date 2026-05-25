@@ -25,6 +25,7 @@ export * from './form/list-forms.use-case';
 export * from './form/find-form-by-id.use-case';
 export * from './form/update-form.use-case';
 export * from './form/delete-form.use-case';
+export * from './form/set-form-active.use-case';
 export * from './form/get-public-form.use-case';
 export * from './form/submit-form-response.use-case';
 export * from './form/list-form-responses.use-case';
