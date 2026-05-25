@@ -49,6 +49,9 @@ export class ConversationSummaryResponse {
   @ApiProperty({ type: LastMessageResponse, nullable: true })
   lastMessage: LastMessageResponse | null;
 
+  @ApiProperty({ example: 0 })
+  unreadCount: number;
+
   @ApiProperty({ example: new Date().toISOString() })
   createdAt: Date;
 

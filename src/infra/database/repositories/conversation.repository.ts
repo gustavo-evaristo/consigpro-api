@@ -115,6 +115,7 @@ export class ConversationRepository implements IConversationRepository {
       lastMessageContent: string | null;
       lastMessageSender: string | null;
       lastMessageSentAt: Date | null;
+      unreadCount: number | bigint;
       createdAt: Date;
       updatedAt: Date;
     };
@@ -136,6 +137,7 @@ export class ConversationRepository implements IConversationRepository {
           mh.content     AS "lastMessageContent",
           mh.sender      AS "lastMessageSender",
           mh."createdAt" AS "lastMessageSentAt",
+          COALESCE(uc."unreadCount", 0) AS "unreadCount",
           c."createdAt",
           c."updatedAt"
         FROM conversations c
@@ -150,6 +152,13 @@ export class ConversationRepository implements IConversationRepository {
           ORDER BY "createdAt" DESC
           LIMIT 1
         ) mh ON true
+        LEFT JOIN LATERAL (
+          SELECT COUNT(*)::int AS "unreadCount"
+          FROM message_history
+          WHERE "conversationId" = c.id
+            AND sender = 'LEAD'
+            AND status <> 'READ'
+        ) uc ON true
         WHERE k."userId" = ${userId}
           AND k."isDeleted" = false
           AND c."isDeleted" = false
@@ -181,6 +190,7 @@ export class ConversationRepository implements IConversationRepository {
               sentAt: r.lastMessageSentAt,
             }
           : null,
+      unreadCount: Number(r.unreadCount ?? 0),
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
     }));

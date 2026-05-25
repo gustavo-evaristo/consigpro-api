@@ -13,6 +13,7 @@ export interface ConversationSummary {
   kanbanStageName: string | null;
   kanbanStageColor: string | null;
   lastMessage: { content: string; sender: string; sentAt: Date } | null;
+  unreadCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
